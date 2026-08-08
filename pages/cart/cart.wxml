@@ -1,0 +1,40 @@
+<view class="page">
+  <!-- 购物车列表 -->
+  <view class="cart-list" wx:if="{{list.length}}">
+    <view class="cart-item" wx:for="{{list}}" wx:key="id">
+      <view class="check {{item.isSelected ? 'checked' : ''}}" bindtap="toggle" data-index="{{index}}">
+        <text wx:if="{{item.isSelected}}">✓</text>
+      </view>
+      <image class="thumb" src="{{item.image}}" mode="aspectFill" bindtap="goGoods" data-id="{{item.productId}}" />
+      <view class="info">
+        <view class="title" bindtap="goGoods" data-id="{{item.productId}}">{{item.title}}</view>
+        <view class="price-row">
+          <view class="price"><text class="symbol">¥</text>{{item.price}}</view>
+          <view class="stepper">
+            <view class="step-btn {{item.quantity <= 1 ? 'disabled' : ''}}" bindtap="onMinus" data-index="{{index}}">−</view>
+            <text class="step-num">{{item.quantity}}</text>
+            <view class="step-btn {{item.quantity >= item.stock ? 'disabled' : ''}}" bindtap="onPlus" data-index="{{index}}">＋</view>
+          </view>
+        </view>
+      </view>
+      <view class="delete" bindtap="onDelete" data-index="{{index}}">🗑</view>
+    </view>
+  </view>
+
+  <view class="empty" wx:if="{{!loading && !list.length}}">
+    <view>购物车还是空的</view>
+    <view class="empty-btn" bindtap="goShopping">去逛逛</view>
+  </view>
+
+  <!-- 底部结算栏 -->
+  <view class="settle-bar safe-bottom" wx:if="{{list.length}}">
+    <view class="check-all" bindtap="toggleAll">
+      <view class="check {{allSelected ? 'checked' : ''}}"><text wx:if="{{allSelected}}">✓</text></view>
+      <text>全选</text>
+    </view>
+    <view class="total">
+      合计:<text class="price"><text class="symbol">¥</text>{{total}}</text>
+    </view>
+    <view class="settle-btn {{!total ? 'btn-disabled' : ''}}" bindtap="goSettle">结算({{selectedCount}})</view>
+  </view>
+</view>

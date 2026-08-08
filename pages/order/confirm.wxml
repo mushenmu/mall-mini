@@ -1,0 +1,52 @@
+<view class="page">
+  <!-- 收货地址 -->
+  <view class="panel address-panel" bindtap="goAddressList">
+    <block wx:if="{{address}}">
+      <view class="addr-main">
+        <view class="addr-name">{{address.name}} <text class="addr-phone">{{address.phone}}</text></view>
+        <view class="addr-detail">{{address.fullAddress}}</view>
+      </view>
+      <text class="arrow">›</text>
+    </block>
+    <view class="addr-empty" wx:else>
+      <text>请选择收货地址</text>
+      <text class="arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 商品清单 -->
+  <view class="panel">
+    <view class="goods-item" wx:for="{{items}}" wx:key="productId">
+      <image class="thumb" src="{{item.image}}" mode="aspectFill" />
+      <view class="info">
+        <view class="title">{{item.title}}</view>
+        <view class="price-row">
+          <view class="price"><text class="symbol">¥</text>{{item.price}}</view>
+          <view class="stepper">
+            <view class="step-btn {{item.quantity <= 1 ? 'disabled' : ''}}" bindtap="onMinus" data-index="{{index}}">−</view>
+            <text class="step-num">{{item.quantity}}</text>
+            <view class="step-btn {{item.quantity >= item.stock ? 'disabled' : ''}}" bindtap="onPlus" data-index="{{index}}">＋</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 备注 -->
+  <view class="panel row">
+    <text class="label">订单备注</text>
+    <input class="remark-input" placeholder="选填,给商家留言" value="{{remark}}" bindinput="onRemarkInput" />
+  </view>
+
+  <view class="safe-bottom" style="height: 140rpx;"></view>
+
+  <!-- 提交栏 -->
+  <view class="submit-bar safe-bottom">
+    <view class="total">
+      合计:<text class="price"><text class="symbol">¥</text>{{totalAmount}}</text>
+    </view>
+    <view class="submit-btn {{submitting ? 'btn-disabled' : ''}}" bindtap="submit">
+      {{submitting ? '提交中...' : '提交订单'}}
+    </view>
+  </view>
+</view>

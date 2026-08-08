@@ -1,0 +1,153 @@
+.page {
+  padding-bottom: 140rpx;
+}
+
+.panel {
+  background: #fff;
+  margin: 16rpx;
+  padding: 24rpx;
+  border-radius: 16rpx;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+/* 地址 */
+.address-panel {
+  display: flex;
+  align-items: center;
+}
+
+.addr-main {
+  flex: 1;
+}
+
+.addr-name {
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.addr-phone {
+  color: #666;
+  font-weight: 400;
+  margin-left: 16rpx;
+}
+
+.addr-detail {
+  color: #666;
+  font-size: 26rpx;
+  margin-top: 8rpx;
+}
+
+.addr-empty {
+  flex: 1;
+  color: #999;
+  font-size: 28rpx;
+}
+
+.arrow {
+  color: #ccc;
+  font-size: 40rpx;
+  margin-left: 16rpx;
+}
+
+/* 商品 */
+.goods-item {
+  display: flex;
+  padding: 16rpx 0;
+}
+
+.thumb {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 12rpx;
+  background: #f0f0f0;
+  flex-shrink: 0;
+}
+
+.info {
+  flex: 1;
+  margin-left: 20rpx;
+  min-width: 0;
+}
+
+.title {
+  font-size: 28rpx;
+  line-height: 1.4;
+  height: 78rpx;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.price-row {
+  margin-top: 12rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+}
+
+.step-btn {
+  width: 48rpx;
+  height: 48rpx;
+  line-height: 44rpx;
+  text-align: center;
+  background: #f5f5f5;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+}
+
+.step-btn.disabled {
+  color: #ccc;
+}
+
+.step-num {
+  min-width: 64rpx;
+  text-align: center;
+  font-size: 28rpx;
+}
+
+.label {
+  font-size: 28rpx;
+  flex-shrink: 0;
+}
+
+.remark-input {
+  flex: 1;
+  margin-left: 24rpx;
+  font-size: 28rpx;
+}
+
+/* 提交栏 */
+.submit-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  padding: 16rpx 24rpx;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.total {
+  flex: 1;
+  font-size: 28rpx;
+}
+
+.submit-btn {
+  background: #fa4126;
+  color: #fff;
+  border-radius: 40rpx;
+  padding: 18rpx 56rpx;
+  font-size: 30rpx;
+}

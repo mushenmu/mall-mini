@@ -1,0 +1,130 @@
+.status-bar {
+  padding: 48rpx 32rpx;
+  color: #fff;
+}
+
+.status-bar.status-0 { background: #fa4126; }
+.status-bar.status-1 { background: #ff9500; }
+.status-bar.status-2 { background: #1677ff; }
+.status-bar.status-3 { background: #07c160; }
+.status-bar.status-4 { background: #999; }
+
+.status-text {
+  font-size: 40rpx;
+  font-weight: 600;
+}
+
+.status-sub {
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  opacity: 0.9;
+}
+
+.panel {
+  background: #fff;
+  margin: 16rpx;
+  padding: 24rpx;
+  border-radius: 16rpx;
+}
+
+.receiver-name {
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.receiver-phone {
+  color: #666;
+  font-weight: 400;
+  margin-left: 16rpx;
+}
+
+.receiver-addr {
+  color: #666;
+  font-size: 26rpx;
+  margin-top: 8rpx;
+}
+
+.goods-item {
+  display: flex;
+  padding: 16rpx 0;
+}
+
+.thumb {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 12rpx;
+  background: #f0f0f0;
+  flex-shrink: 0;
+}
+
+.info {
+  flex: 1;
+  margin-left: 20rpx;
+  min-width: 0;
+}
+
+.title {
+  font-size: 28rpx;
+  line-height: 1.4;
+  height: 78rpx;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.price-row {
+  margin-top: 12rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.qty {
+  color: #999;
+  font-size: 26rpx;
+}
+
+.amount-row {
+  display: flex;
+  justify-content: space-between;
+  color: #333;
+  font-size: 28rpx;
+  padding: 10rpx 0;
+}
+
+.total-row {
+  border-top: 1rpx solid #f5f5f5;
+  margin-top: 8rpx;
+  padding-top: 20rpx;
+}
+
+/* 底部操作 */
+.action-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #fff;
+  display: flex;
+  justify-content: flex-end;
+  padding: 16rpx 24rpx;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.ghost-btn {
+  border: 1rpx solid #ccc;
+  color: #333;
+  border-radius: 40rpx;
+  padding: 14rpx 40rpx;
+  font-size: 28rpx;
+  margin-right: 20rpx;
+}
+
+.primary-btn {
+  background: #fa4126;
+  color: #fff;
+  border-radius: 40rpx;
+  padding: 14rpx 48rpx;
+  font-size: 28rpx;
+}

@@ -1,0 +1,53 @@
+<view class="page" wx:if="{{goods}}">
+  <!-- 图片轮播 -->
+  <swiper class="gallery" indicator-dots circular>
+    <swiper-item wx:for="{{goods.images}}" wx:key="index">
+      <image class="gallery-img" src="{{item}}" mode="aspectFill" />
+    </swiper-item>
+  </swiper>
+
+  <!-- 价格/标题 -->
+  <view class="panel">
+    <view class="price-row">
+      <view class="price"><text class="symbol">¥</text>{{goods.price}}</view>
+      <view class="origin-price" wx:if="{{goods.originalPrice > goods.price}}">¥{{goods.originalPrice}}</view>
+      <view class="sales">已售{{goods.sales}}</view>
+    </view>
+    <view class="title">{{goods.title}}</view>
+    <view class="subtitle" wx:if="{{goods.subtitle}}">{{goods.subtitle}}</view>
+    <view class="tags" wx:if="{{goods.tags.length}}">
+      <text class="tag" wx:for="{{goods.tags}}" wx:for-item="t" wx:key="index">{{t.title}}</text>
+    </view>
+  </view>
+
+  <!-- 数量选择 -->
+  <view class="panel row-between">
+    <text class="label">购买数量</text>
+    <view class="stepper">
+      <view class="step-btn {{quantity <= 1 ? 'disabled' : ''}}" bindtap="onMinus">−</view>
+      <text class="step-num">{{quantity}}</text>
+      <view class="step-btn {{quantity >= goods.stock ? 'disabled' : ''}}" bindtap="onPlus">＋</view>
+    </view>
+  </view>
+
+  <!-- 图文详情 -->
+  <view class="panel detail-panel">
+    <view class="detail-title">图文详情</view>
+    <rich-text nodes="{{goods.detail}}" wx:if="{{goods.detail}}" />
+    <view class="empty" wx:else>暂无详情</view>
+  </view>
+
+  <view class="safe-bottom" style="height: 140rpx;"></view>
+
+  <!-- 底部操作栏 -->
+  <view class="action-bar safe-bottom">
+    <view class="action-cart" bindtap="goCart">
+      <text class="cart-icon">🛒</text>
+      <text>购物车</text>
+    </view>
+    <view class="action-btn add" bindtap="addCart">加入购物车</view>
+    <view class="action-btn buy" bindtap="buyNow">立即购买</view>
+  </view>
+</view>
+
+<view class="empty" wx:if="{{loading}}">加载中...</view>

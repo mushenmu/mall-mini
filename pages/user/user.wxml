@@ -1,0 +1,32 @@
+<view class="page">
+  <!-- 用户信息 -->
+  <view class="user-header">
+    <image class="avatar" src="{{userInfo.avatarUrl || 'https://tdesign.gtimg.com/miniprogram/template/retail/avatar/avatar-1.jpg'}}" mode="aspectFill" />
+    <view class="user-info" bindtap="onLogin">
+      <view class="nickname">{{userInfo.nickName || '点击登录'}}</view>
+      <view class="sub" wx:if="{{isDemo}}">点击授权微信登录</view>
+      <view class="sub" wx:else>{{userInfo.phoneNumber || '欢迎回来'}}</view>
+    </view>
+  </view>
+
+  <!-- 订单入口 -->
+  <view class="panel">
+    <view class="panel-title" bindtap="goOrders" data-status="">
+      我的订单 <text class="more">查看全部 ›</text>
+    </view>
+    <view class="order-nav">
+      <view class="nav-item" wx:for="{{orderCounts}}" wx:key="status" bindtap="goOrders" data-status="{{item.status}}">
+        <view class="nav-num">{{item.count}}</view>
+        <view class="nav-label">{{item.label}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 常用功能 -->
+  <view class="panel menu">
+    <view class="menu-item" bindtap="goAddress">
+      <text>收货地址</text>
+      <text class="more">›</text>
+    </view>
+  </view>
+</view>

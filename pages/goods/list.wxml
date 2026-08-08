@@ -1,0 +1,54 @@
+<view class="page">
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <view class="search-input-wrap">
+      <text class="search-icon">🔍</text>
+      <input class="search-input" placeholder="搜索商品" confirm-type="search"
+        value="{{keyword}}" bindinput="onKeywordInput" bindconfirm="onSearch" />
+      <text class="search-clear" wx:if="{{keyword}}" bindtap="onClearKeyword">✕</text>
+    </view>
+  </view>
+
+  <!-- 热门搜索 -->
+  <view class="hot-words" wx:if="{{popularWords.length && !keyword}}">
+    <text class="hot-word" wx:for="{{popularWords}}" wx:key="index"
+      bindtap="onTapPopular" data-word="{{item}}">{{item}}</text>
+  </view>
+
+  <!-- 分类横向滚动 -->
+  <scroll-view class="cate-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+    <view class="cate-item {{activeCat === '' ? 'active' : ''}}" bindtap="onTapCategory" data-id="">全部</view>
+    <view class="cate-item {{activeCat === item.id ? 'active' : ''}}"
+      wx:for="{{categories}}" wx:key="id" bindtap="onTapCategory" data-id="{{item.id}}">{{item.name}}</view>
+  </scroll-view>
+
+  <!-- 排序条 -->
+  <view class="sort-bar">
+    <view class="sort-item {{sort === '' ? 'active' : ''}}" bindtap="onSortChange" data-sort="">综合</view>
+    <view class="sort-item {{sort === 'sales' ? 'active' : ''}}" bindtap="onSortChange" data-sort="sales">销量</view>
+    <view class="sort-item {{sort === 'priceAsc' ? 'active' : ''}}" bindtap="onSortChange" data-sort="priceAsc">价格↑</view>
+    <view class="sort-item {{sort === 'priceDesc' ? 'active' : ''}}" bindtap="onSortChange" data-sort="priceDesc">价格↓</view>
+  </view>
+
+  <!-- 商品列表 -->
+  <view class="goods-list">
+    <view class="goods-card row" wx:for="{{goods}}" wx:key="id" bindtap="goGoods" data-id="{{item.id}}">
+      <image class="thumb" src="{{item.image}}" mode="aspectFill" lazy-load />
+      <view class="info">
+        <view class="title">{{item.title}}</view>
+        <view class="tags" wx:if="{{item.tags.length}}">
+          <text class="tag" wx:for="{{item.tags}}" wx:for-item="t" wx:key="index">{{t.title}}</text>
+        </view>
+        <view class="price-row">
+          <view class="price"><text class="symbol">¥</text>{{item.price}}</view>
+          <view class="origin-price" wx:if="{{item.originalPrice > item.price}}">¥{{item.originalPrice}}</view>
+          <view class="sales">已售{{item.sales}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty" wx:if="{{!loading && !goods.length}}">暂无商品</view>
+  <view class="loading-more" wx:if="{{loading}}">加载中...</view>
+  <view class="loading-more" wx:if="{{finished && goods.length}}">— 没有更多了 —</view>
+</view>

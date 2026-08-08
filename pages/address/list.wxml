@@ -1,0 +1,20 @@
+<view class="page">
+  <view class="addr-card" wx:for="{{list}}" wx:key="id" bindtap="choose" data-id="{{item.id}}">
+    <view class="addr-head">
+      <text class="addr-name">{{item.name}}</text>
+      <text class="addr-phone">{{item.phone}}</text>
+      <text class="default-tag" wx:if="{{item.isDefault}}">默认</text>
+    </view>
+    <view class="addr-detail">{{item.fullAddress}}</view>
+    <view class="addr-ops">
+      <view class="op" catchtap="edit" data-id="{{item.id}}">✏️ 编辑</view>
+      <view class="op" catchtap="remove" data-id="{{item.id}}">🗑 删除</view>
+    </view>
+  </view>
+
+  <view class="empty" wx:if="{{!loading && !list.length}}">还没有收货地址</view>
+
+  <view class="safe-bottom" style="height: 140rpx;"></view>
+
+  <view class="add-btn safe-bottom" bindtap="goEdit">+ 新增收货地址</view>
+</view>

@@ -1,0 +1,47 @@
+<view class="page" wx:if="{{order}}">
+  <!-- 状态头部 -->
+  <view class="status-bar status-{{order.status}}">
+    <view class="status-text">{{order.statusLabel}}</view>
+    <view class="status-sub">订单号:{{order.orderNo}}</view>
+  </view>
+
+  <!-- 收货信息 -->
+  <view class="panel">
+    <view class="receiver-name">{{order.receiver.name}} <text class="receiver-phone">{{order.receiver.phone}}</text></view>
+    <view class="receiver-addr">{{order.receiver.address}}</view>
+  </view>
+
+  <!-- 商品清单 -->
+  <view class="panel">
+    <view class="goods-item" wx:for="{{order.items}}" wx:key="index">
+      <image class="thumb" src="{{item.goodsImage}}" mode="aspectFill" />
+      <view class="info">
+        <view class="title">{{item.goodsName}}</view>
+        <view class="price-row">
+          <view class="price"><text class="symbol">¥</text>{{item.priceYuan}}</view>
+          <text class="qty">x{{item.quantity}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 金额明细 -->
+  <view class="panel">
+    <view class="amount-row"><text>商品总额</text><text>¥{{order.totalAmountYuan}}</text></view>
+    <view class="amount-row"><text>运费</text><text>¥0.00</text></view>
+    <view class="amount-row total-row"><text>实付款</text><text class="price"><text class="symbol">¥</text>{{order.paymentAmountYuan}}</text></view>
+    <view class="amount-row" wx:if="{{order.remark}}"><text>备注</text><text>{{order.remark}}</text></view>
+    <view class="amount-row"><text>下单时间</text><text>{{order.createTime}}</text></view>
+  </view>
+
+  <view class="safe-bottom" style="height: 140rpx;"></view>
+
+  <!-- 底部操作 -->
+  <view class="action-bar safe-bottom" wx:if="{{order.status === 0 || order.status === 2}}">
+    <view class="ghost-btn" wx:if="{{order.status === 0}}" bindtap="cancel">取消订单</view>
+    <view class="primary-btn" wx:if="{{order.status === 0}}" bindtap="pay">立即支付</view>
+    <view class="primary-btn" wx:if="{{order.status === 2}}" bindtap="confirm">确认收货</view>
+  </view>
+</view>
+
+<view class="empty" wx:if="{{loading}}">加载中...</view>

@@ -141,6 +141,14 @@ Page({
       wx.showToast({ title: '没有可结算的商品', icon: 'none' });
       return;
     }
+    const outOfStock = this.data.items.find((item) => item.stock <= 0 || item.quantity > item.stock);
+    if (outOfStock) {
+      wx.showToast({
+        title: outOfStock.stock > 0 ? `${outOfStock.title}库存不足` : `${outOfStock.title}已售罄`,
+        icon: 'none',
+      });
+      return;
+    }
     this.setData({ submitting: true });
     const payload = {
       uid: getUid(),

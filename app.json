@@ -14,7 +14,7 @@
   "window": {
     "navigationBarBackgroundColor": "#ffffff",
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "木神木商城",
+    "navigationBarTitleText": "十二的小店",
     "backgroundColor": "#f5f5f5",
     "backgroundTextStyle": "dark"
   },
@@ -24,12 +24,33 @@
     "backgroundColor": "#ffffff",
     "borderStyle": "black",
     "list": [
-      { "pagePath": "pages/home/home", "text": "首页" },
-      { "pagePath": "pages/goods/list", "text": "分类" },
-      { "pagePath": "pages/cart/cart", "text": "购物车" },
-      { "pagePath": "pages/user/user", "text": "我的" }
+      {
+        "pagePath": "pages/home/home",
+        "text": "首页",
+        "iconPath": "assets/tabbar/home.png",
+        "selectedIconPath": "assets/tabbar/home-active.png"
+      },
+      {
+        "pagePath": "pages/goods/list",
+        "text": "分类",
+        "iconPath": "assets/tabbar/category.png",
+        "selectedIconPath": "assets/tabbar/category-active.png"
+      },
+      {
+        "pagePath": "pages/cart/cart",
+        "text": "购物车",
+        "iconPath": "assets/tabbar/cart.png",
+        "selectedIconPath": "assets/tabbar/cart-active.png"
+      },
+      {
+        "pagePath": "pages/user/user",
+        "text": "我的",
+        "iconPath": "assets/tabbar/user.png",
+        "selectedIconPath": "assets/tabbar/user-active.png"
+      }
     ]
   },
   "style": "v2",
+  "lazyCodeLoading": "requiredComponents",
   "sitemapLocation": "sitemap.json"
 }

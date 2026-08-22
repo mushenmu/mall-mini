@@ -145,6 +145,14 @@ Page({
       wx.showToast({ title: '请先选择商品', icon: 'none' });
       return;
     }
+    const outOfStock = sel.find((g) => g.stock <= 0 || g.quantity > g.stock);
+    if (outOfStock) {
+      wx.showToast({
+        title: outOfStock.stock > 0 ? `${outOfStock.title}库存不足` : `${outOfStock.title}已售罄`,
+        icon: 'none',
+      });
+      return;
+    }
     // 把选中的购物车条目带到结算页(JSON 序列化,控制长度)
     const payload = sel.map((g) => ({
       productId: g.productId,

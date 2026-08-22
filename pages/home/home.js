@@ -4,7 +4,6 @@ const { invalidateCache } = require('../../utils/request');
 Page({
   data: {
     swiper: [],
-    categoryList: [],
     hotGoods: [],
     loading: true,
     error: '',
@@ -26,7 +25,6 @@ Page({
         const goods = (home.hotGoods || []).map((it) => this.formatGoods(it));
         this.setData({
           swiper: home.swiper || [],
-          categoryList: home.categoryList || [],
           hotGoods: goods,
           loading: false,
         });
@@ -47,7 +45,7 @@ Page({
       subtitle: it.subtitle,
       image: it.image,
       price: (parseInt(it.price, 10) || 0) / 100,
-      originalPrice: (parseInt(it.originalPrice, 10) || 0) / 100,
+      sales: it.sales || 0,
       tags: it.tags || [],
     };
   },
@@ -55,16 +53,6 @@ Page({
   goGoods(e) {
     const { id } = e.currentTarget.dataset;
     wx.navigateTo({ url: `/pages/goods/detail?id=${id}` });
-  },
-
-  goCategory(e) {
-    const { id } = e.currentTarget.dataset;
-    if (id) {
-      // 通过全局事件通知列表页选中该分类
-      const app = getApp();
-      if (app.globalData) app.globalData.pendingCategoryId = id;
-    }
-    wx.switchTab({ url: '/pages/goods/list' });
   },
 
   goSearch() {

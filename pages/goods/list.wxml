@@ -41,7 +41,6 @@
         </view>
         <view class="price-row">
           <view class="price"><text class="symbol">¥</text>{{item.price}}</view>
-          <view class="origin-price" wx:if="{{item.originalPrice > item.price}}">¥{{item.originalPrice}}</view>
           <view class="sales">已售{{item.sales}}</view>
         </view>
       </view>

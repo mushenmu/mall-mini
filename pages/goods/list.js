@@ -108,7 +108,6 @@ Page({
       title: it.title,
       image: it.image,
       price: (parseInt(it.price, 10) || 0) / 100,
-      originalPrice: (parseInt(it.originalPrice, 10) || 0) / 100,
       sales: it.sales || 0,
       tags: it.tags || [],
     };

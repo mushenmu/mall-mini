@@ -3,18 +3,9 @@
   <swiper class="swiper" indicator-dots autoplay circular interval="4000" duration="500"
     wx:if="{{swiper.length}}">
     <swiper-item wx:for="{{swiper}}" wx:key="index">
-      <image class="swiper-img" src="{{item.image}}" mode="aspectFill" bindtap="goCategory"
-        data-id="{{item.link}}" />
+      <image class="swiper-img" src="{{item.image}}" mode="aspectFill" />
     </swiper-item>
   </swiper>
-
-  <!-- 分类宫格 -->
-  <view class="cate-grid" wx:if="{{categoryList.length}}">
-    <view class="cate-item" wx:for="{{categoryList}}" wx:key="id" bindtap="goCategory" data-id="{{item.id}}">
-      <image class="cate-icon" src="{{item.icon}}" mode="aspectFill" />
-      <text class="cate-name">{{item.name}}</text>
-    </view>
-  </view>
 
   <!-- 热门商品 -->
   <view class="section">
@@ -29,7 +20,7 @@
           <view class="title">{{item.title}}</view>
           <view class="price-row">
             <view class="price"><text class="symbol">¥</text>{{item.price}}</view>
-            <view class="origin-price" wx:if="{{item.originalPrice > item.price}}">¥{{item.originalPrice}}</view>
+            <view class="sales">已售{{item.sales}}</view>
           </view>
         </view>
       </view>

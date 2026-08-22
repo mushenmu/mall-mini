@@ -60,7 +60,7 @@
 .status-0 { color: #fa4126; }
 .status-1 { color: #ff9500; }
 .status-2 { color: #1677ff; }
-.status-3 { color: #07c160; }
+.status-3 { color: #fa4126; }
 .status-4 { color: #999; }
 
 .order-body {

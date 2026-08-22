@@ -20,9 +20,11 @@ Page({
     });
     fetchUserCenter(getUid())
       .then((res) => {
+        const userInfo = res.userInfo || cached;
         this.setData({
-          userInfo: res.userInfo || cached,
+          userInfo,
           orderCounts: res.orderCounts || [],
+          isDemo: !userInfo || !userInfo.nickName || userInfo.nickName === '微信用户',
         });
       })
       .catch((err) => console.error('用户中心加载失败', err));

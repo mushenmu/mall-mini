@@ -21,10 +21,11 @@
     </view>
   </view>
 
-  <view class="empty" wx:if="{{!loading && !list.length}}">
+  <view class="empty" wx:if="{{!loading && !error && !list.length}}">
     <view>购物车还是空的</view>
     <view class="empty-btn" bindtap="goShopping">去逛逛</view>
   </view>
+  <view class="error-state" wx:if="{{error}}"><text>{{error}}</text><text class="retry" bindtap="retry">重新加载</text></view>
 
   <!-- 底部结算栏 -->
   <view class="settle-bar safe-bottom" wx:if="{{list.length}}">

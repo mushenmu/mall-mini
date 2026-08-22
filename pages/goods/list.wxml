@@ -48,7 +48,8 @@
     </view>
   </view>
 
-  <view class="empty" wx:if="{{!loading && !goods.length}}">暂无商品</view>
+  <view class="empty" wx:if="{{!loading && !error && !goods.length}}">暂无商品</view>
+  <view class="error-state" wx:if="{{error}}"><text>{{error}}</text><text class="retry" bindtap="retry">重新加载</text></view>
   <view class="loading-more" wx:if="{{loading}}">加载中...</view>
   <view class="loading-more" wx:if="{{finished && goods.length}}">— 没有更多了 —</view>
 </view>

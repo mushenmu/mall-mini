@@ -36,5 +36,6 @@
     </view>
   </view>
 
-  <view class="empty" wx:if="{{!loading && !hotGoods.length}}">暂无商品</view>
+  <view class="empty" wx:if="{{!loading && !error && !hotGoods.length}}">暂无商品</view>
+  <view class="error-state" wx:if="{{error}}"><text>{{error}}</text><text class="retry" bindtap="retry">重新加载</text></view>
 </view>

@@ -7,6 +7,7 @@ Page({
     total: 0,
     allSelected: false,
     loading: true,
+    error: '',
   },
 
   onShow() {
@@ -18,6 +19,7 @@ Page({
   },
 
   load(done) {
+    this.setData({ loading: true, error: '' });
     fetchCart(getUid())
       .then((res) => {
         const list = (res.list || []).map((g) => ({
@@ -36,7 +38,7 @@ Page({
       })
       .catch((err) => {
         console.error('购物车加载失败', err);
-        this.setData({ loading: false });
+        this.setData({ loading: false, error: err.message || '购物车加载失败' });
         if (done) done();
       });
   },
@@ -127,6 +129,14 @@ Page({
   goGoods(e) {
     const { id } = e.currentTarget.dataset;
     wx.navigateTo({ url: `/pages/goods/detail?id=${id}` });
+  },
+
+  retry() {
+    this.load();
+  },
+
+  goShopping() {
+    wx.switchTab({ url: '/pages/goods/list' });
   },
 
   goSettle() {

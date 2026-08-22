@@ -94,6 +94,10 @@ page {
   font-size: 28rpx;
 }
 
+/* 网络错误态 */
+.error-state { display: flex; flex-direction: column; align-items: center; color: #999; padding: 80rpx 0; }
+.retry { color: #fa4126; margin-top: 20rpx; }
+
 /* 底部安全区 */
 .safe-bottom {
   padding-bottom: env(safe-area-inset-bottom);

@@ -20,7 +20,7 @@ function loginWithWeChat(profile) {
 
 // 用户中心:用户信息 + 订单状态统计
 function fetchUserCenter(uid) {
-  return get('/api/user/center', { uid });
+  return get('/api/user/center', { uid }, { cache: true, ttl: 30000 });
 }
 
 module.exports = { loginWithWeChat, fetchUserCenter };

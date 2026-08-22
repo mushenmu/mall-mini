@@ -32,6 +32,10 @@ Page({
     this.loadAddresses();
   },
 
+  onShow() {
+    if (this.data.addressList.length) this.loadAddresses();
+  },
+
   loadGoods(items) {
     // 逐件拉详情,组装结算清单
     const jobs = items.map((it) =>
@@ -146,6 +150,7 @@ Page({
     };
     commitOrder(payload)
       .then((res) => {
+        wx.removeStorageSync('mushenmu_selected_address');
         wx.showToast({ title: '下单成功', icon: 'success' });
         wx.redirectTo({ url: `/pages/order/detail?orderNo=${res.orderNo}` });
       })

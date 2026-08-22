@@ -1,4 +1,5 @@
-const { fetchHome, fetchGoodsList } = require('../../services/goods');
+const { fetchHome } = require('../../services/goods');
+const { invalidateCache } = require('../../utils/request');
 
 Page({
   data: {
@@ -6,6 +7,7 @@ Page({
     categoryList: [],
     hotGoods: [],
     loading: true,
+    error: '',
   },
 
   onLoad() {
@@ -13,12 +15,14 @@ Page({
   },
 
   onPullDownRefresh() {
+    invalidateCache('/api/home');
     this.loadAll(() => wx.stopPullDownRefresh());
   },
 
   loadAll(done) {
-    Promise.all([fetchHome(), fetchGoodsList({ pageNum: 1, pageSize: 10 })])
-      .then(([home]) => {
+    this.setData({ loading: true, error: '' });
+    fetchHome()
+      .then((home) => {
         const goods = (home.hotGoods || []).map((it) => this.formatGoods(it));
         this.setData({
           swiper: home.swiper || [],
@@ -30,7 +34,7 @@ Page({
       })
       .catch((err) => {
         console.error('首页加载失败', err);
-        this.setData({ loading: false });
+        this.setData({ loading: false, error: err.message || '网络开小差了' });
         if (done) done();
       });
   },
@@ -55,12 +59,12 @@ Page({
 
   goCategory(e) {
     const { id } = e.currentTarget.dataset;
-    wx.switchTab({ url: '/pages/goods/list' });
     if (id) {
       // 通过全局事件通知列表页选中该分类
       const app = getApp();
       if (app.globalData) app.globalData.pendingCategoryId = id;
     }
+    wx.switchTab({ url: '/pages/goods/list' });
   },
 
   goSearch() {
@@ -69,5 +73,10 @@ Page({
 
   goCart() {
     wx.switchTab({ url: '/pages/cart/cart' });
+  },
+
+  retry() {
+    invalidateCache('/api/home');
+    this.loadAll();
   },
 });

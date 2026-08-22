@@ -12,6 +12,7 @@ Page({
     totalCount: 0,
     loading: false,
     finished: false,
+    error: '',
     sort: '',             // '' | sales | priceAsc | priceDesc
   },
 
@@ -51,7 +52,9 @@ Page({
 
   loadCategories() {
     fetchCategoryList()
-      .then((cats) => this.setData({ categories: cats }))
+      .then((cats) => this.setData({
+        categories: (cats || []).map((cat) => Object.assign({}, cat, { id: String(cat.id) })),
+      }))
       .catch((err) => console.error('分类加载失败', err));
   },
 
@@ -67,7 +70,7 @@ Page({
   },
 
   fetchGoods(pageNum, done) {
-    this.setData({ loading: true });
+    this.setData({ loading: true, error: '' });
     fetchGoodsList({
       keyword: this.data.keyword,
       categoryId: this.data.activeCat,
@@ -89,7 +92,7 @@ Page({
       })
       .catch((err) => {
         console.error('商品列表加载失败', err);
-        this.setData({ loading: false });
+        this.setData({ loading: false, error: err.message || '商品加载失败' });
         if (done) done();
       });
   },
@@ -147,5 +150,9 @@ Page({
   goGoods(e) {
     const { id } = e.currentTarget.dataset;
     wx.navigateTo({ url: `/pages/goods/detail?id=${id}` });
+  },
+
+  retry() {
+    this.reload();
   },
 });

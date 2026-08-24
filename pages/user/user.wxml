@@ -4,7 +4,8 @@
     <image class="avatar" src="{{userInfo.avatarUrl || 'https://tdesign.gtimg.com/miniprogram/template/retail/avatar/avatar-1.jpg'}}" mode="aspectFill" />
     <view class="user-info" bindtap="onLogin">
       <view class="nickname">{{userInfo.nickName || '点击登录'}}</view>
-      <view class="sub" wx:if="{{isDemo}}">点击授权微信登录</view>
+      <view class="sub" wx:if="{{loggingIn}}">登录中...</view>
+      <view class="sub" wx:elif="{{isDemo}}">点击授权微信登录</view>
       <view class="sub" wx:else>{{userInfo.phoneNumber || '欢迎回来'}}</view>
     </view>
   </view>
@@ -28,5 +29,14 @@
       <text>收货地址</text>
       <text class="more">›</text>
     </view>
+    <view class="menu-item" wx:if="{{!isDemo}}" bindtap="logout">
+      <text>退出登录</text>
+      <text class="more">›</text>
+    </view>
   </view>
+  <view class="error-state" wx:if="{{error}}">
+    <text>{{error}}</text>
+    <text class="retry" bindtap="retry">重新加载</text>
+  </view>
+  <view class="loading-more" wx:if="{{loading}}">加载中...</view>
 </view>

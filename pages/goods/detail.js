@@ -46,7 +46,6 @@ Page({
       subtitle: g.subtitle,
       images: (g.images && g.images.length ? g.images : [g.image]),
       price: (parseInt(g.price, 10) || 0) / 100,
-      originalPrice: (parseInt(g.originalPrice, 10) || 0) / 100,
       stock: g.stock || 0,
       sales: g.sales || 0,
       tags: g.tags || [],
@@ -65,6 +64,7 @@ Page({
   },
 
   onPlus() {
+    if (!this.data.goods) return;
     const stock = this.data.goods.stock;
     if (this.data.quantity >= stock) {
       wx.showToast({ title: '已达库存上限', icon: 'none' });
@@ -75,6 +75,7 @@ Page({
 
   // 加入购物车
   addCart() {
+    if (!this.data.goods) return;
     const { id, stock } = this.data.goods;
     if (!stock) {
       wx.showToast({ title: '商品已售罄', icon: 'none' });
@@ -89,6 +90,7 @@ Page({
 
   // 立即购买:直接去结算页
   buyNow() {
+    if (!this.data.goods) return;
     const { id, stock } = this.data.goods;
     if (!stock) {
       wx.showToast({ title: '商品已售罄', icon: 'none' });

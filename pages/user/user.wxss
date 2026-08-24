@@ -88,3 +88,23 @@
 .menu-item:last-child {
   border-bottom: none;
 }
+
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #999;
+  padding: 60rpx 0;
+}
+
+.retry {
+  color: #fa4126;
+  margin-top: 20rpx;
+}
+
+.loading-more {
+  text-align: center;
+  color: #999;
+  font-size: 24rpx;
+  padding: 20rpx 0;
+}

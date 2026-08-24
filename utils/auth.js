@@ -14,6 +14,7 @@ const INFO_KEY = 'mushenmu_user_info';
 // 演示兜底 uid:后端 get_or_create 会自动建用户。
 // 仅在微信登录失败时使用,保证 App 不阻塞、页面照常加载。
 const FALLBACK_UID = '88888888205468';
+let loginPromise = null;
 
 /** 获取当前 uid:优先 Storage(登录结果),其次全局变量,最后兜底。 */
 function getUid() {
@@ -36,6 +37,8 @@ function saveLogin(data) {
   if (data.userInfo) wx.setStorageSync(INFO_KEY, data.userInfo);
   const app = getApp();
   if (app && app.globalData) app.globalData.uid = uid;
+  require('./request').invalidateCache('/api/user/center');
+  loginPromise = null;
 }
 
 /** 退出登录(清空本地登录态,并重置内存态回到兜底 uid)。 */
@@ -44,6 +47,7 @@ function clearLogin() {
   wx.removeStorageSync(INFO_KEY);
   const app = getApp();
   if (app && app.globalData) app.globalData.uid = FALLBACK_UID;
+  loginPromise = null;
 }
 
 /**
@@ -57,11 +61,31 @@ function ensureLogin(profile) {
   if (cached) {
     return Promise.resolve({ uid: cached, userInfo: getUserInfo() });
   }
+  if (loginPromise) return loginPromise;
   const { loginWithWeChat } = require('../services/user');
-  return loginWithWeChat(profile).then((res) => {
+  loginPromise = loginWithWeChat(profile).then((res) => {
     saveLogin(res);
     return res;
+  }).catch((error) => {
+    loginPromise = null;
+    throw error;
   });
+  return loginPromise;
 }
 
-module.exports = { getUid, getUserInfo, saveLogin, clearLogin, ensureLogin, FALLBACK_UID };
+function loginWithProfile(profile) {
+  const { loginWithWeChat } = require('../services/user');
+  if (loginPromise) return loginPromise;
+  loginPromise = loginWithWeChat(profile).then((res) => {
+    saveLogin(res);
+    return res;
+  }).catch((error) => {
+    loginPromise = null;
+    throw error;
+  });
+  return loginPromise;
+}
+
+module.exports = {
+  getUid, getUserInfo, saveLogin, clearLogin, ensureLogin, loginWithProfile, FALLBACK_UID,
+};

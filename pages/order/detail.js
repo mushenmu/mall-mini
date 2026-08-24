@@ -15,7 +15,7 @@ Page({
   },
 
   load() {
-    fetchOrderDetail(this.data.orderNo)
+    fetchOrderDetail(getUid(), this.data.orderNo)
       .then((o) => {
         o.totalAmountYuan = (parseInt(o.totalAmount, 10) || 0) / 100;
         o.paymentAmountYuan = (parseInt(o.paymentAmount, 10) || 0) / 100;

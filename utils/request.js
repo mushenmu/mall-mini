@@ -10,6 +10,7 @@
 const { apiBaseUrl } = require('../config');
 
 const DEFAULT_TIMEOUT = 8000;
+const responseCache = Object.create(null);
 
 function buildUrl(path, query) {
   let url = `${apiBaseUrl}${path}`;
@@ -36,43 +37,74 @@ function request(path, options) {
   const query = options.query || {};
 
   const finalUrl = buildUrl(path, query);
+  const cacheKey = `${method}:${finalUrl}`;
+  const cached = responseCache[cacheKey];
+  if (method === 'GET' && options.cache && cached && cached.expiresAt > Date.now()) {
+    return Promise.resolve(cached.data);
+  }
 
   return new Promise((resolve, reject) => {
-    const task = wx.request({
-      url: finalUrl,
-      method,
-      data,
-      header: { 'Content-Type': 'application/json' },
-      success: (res) => {
-        if (res.statusCode >= 200 && res.statusCode < 300) {
-          const body = res.data || {};
-          const payload = body.data !== undefined ? body.data : body; // 解包一层
-          resolve(payload);
-        } else {
-          const body = res.data || {};
-          reject(new Error(body.msg || `请求失败 ${res.statusCode}: ${path}`));
-        }
-      },
-      fail: (err) => reject(err),
-    });
-
-    if (task && typeof task.abort === 'function') {
-      const timer = setTimeout(() => {
-        try { task.abort(); } catch (e) { /* noop */ }
-      }, DEFAULT_TIMEOUT);
-      if (task && typeof task.onHeadersReceived === 'function') {
-        task.onHeadersReceived(() => clearTimeout(timer));
-      }
+    let settled = false;
+    let timer = null;
+    const finish = (callback, value) => {
+      if (settled) return;
+      settled = true;
+      if (timer) clearTimeout(timer);
+      callback(value);
+    };
+    let task;
+    try {
+      task = wx.request({
+        url: finalUrl,
+        method,
+        data,
+        header: { 'Content-Type': 'application/json' },
+        success: (res) => {
+          if (res.statusCode >= 200 && res.statusCode < 300) {
+            const body = res.data || {};
+            if (body.success === false) {
+              finish(reject, new Error(body.msg || `请求失败: ${path}`));
+              return;
+            }
+            const payload = body.data !== undefined ? body.data : body;
+            if (method === 'GET' && options.cache) {
+              responseCache[cacheKey] = {
+                data: payload,
+                expiresAt: Date.now() + (options.ttl || 60000),
+              };
+            }
+            finish(resolve, payload);
+          } else {
+            const body = res.data || {};
+            finish(reject, new Error(body.msg || `请求失败 ${res.statusCode}: ${path}`));
+          }
+        },
+        fail: (err) => finish(reject, err),
+      });
+    } catch (error) {
+      finish(reject, error);
     }
+    timer = setTimeout(() => {
+      try {
+        if (task && typeof task.abort === 'function') task.abort();
+      } catch (error) { /* noop */ }
+      finish(reject, new Error('请求超时，请检查网络后重试'));
+    }, options.timeout || DEFAULT_TIMEOUT);
   });
 }
 
-function get(path, query) {
-  return request(path, { method: 'GET', query });
+function get(path, query, options) {
+  return request(path, Object.assign({}, options, { method: 'GET', query }));
 }
 
 function post(path, data) {
   return request(path, { method: 'POST', data });
 }
 
-module.exports = { get, post, apiBaseUrl, request };
+function invalidateCache(path) {
+  Object.keys(responseCache).forEach((key) => {
+    if (!path || key.indexOf(path) !== -1) delete responseCache[key];
+  });
+}
+
+module.exports = { get, post, apiBaseUrl, request, invalidateCache };

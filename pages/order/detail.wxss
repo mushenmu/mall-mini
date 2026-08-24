@@ -6,7 +6,7 @@
 .status-bar.status-0 { background: #fa4126; }
 .status-bar.status-1 { background: #ff9500; }
 .status-bar.status-2 { background: #1677ff; }
-.status-bar.status-3 { background: #07c160; }
+.status-bar.status-3 { background: #fa4126; }
 .status-bar.status-4 { background: #999; }
 
 .status-text {

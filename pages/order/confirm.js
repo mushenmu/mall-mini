@@ -32,6 +32,10 @@ Page({
     this.loadAddresses();
   },
 
+  onShow() {
+    if (this.data.addressList.length) this.loadAddresses();
+  },
+
   loadGoods(items) {
     // 逐件拉详情,组装结算清单
     const jobs = items.map((it) =>
@@ -137,6 +141,14 @@ Page({
       wx.showToast({ title: '没有可结算的商品', icon: 'none' });
       return;
     }
+    const outOfStock = this.data.items.find((item) => item.stock <= 0 || item.quantity > item.stock);
+    if (outOfStock) {
+      wx.showToast({
+        title: outOfStock.stock > 0 ? `${outOfStock.title}库存不足` : `${outOfStock.title}已售罄`,
+        icon: 'none',
+      });
+      return;
+    }
     this.setData({ submitting: true });
     const payload = {
       uid: getUid(),
@@ -146,6 +158,7 @@ Page({
     };
     commitOrder(payload)
       .then((res) => {
+        wx.removeStorageSync('mushenmu_selected_address');
         wx.showToast({ title: '下单成功', icon: 'success' });
         wx.redirectTo({ url: `/pages/order/detail?orderNo=${res.orderNo}` });
       })

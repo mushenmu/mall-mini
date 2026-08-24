@@ -7,6 +7,7 @@ Page({
     total: 0,
     allSelected: false,
     loading: true,
+    error: '',
   },
 
   onShow() {
@@ -18,6 +19,7 @@ Page({
   },
 
   load(done) {
+    this.setData({ loading: true, error: '' });
     fetchCart(getUid())
       .then((res) => {
         const list = (res.list || []).map((g) => ({
@@ -36,7 +38,7 @@ Page({
       })
       .catch((err) => {
         console.error('购物车加载失败', err);
-        this.setData({ loading: false });
+        this.setData({ loading: false, error: err.message || '购物车加载失败' });
         if (done) done();
       });
   },
@@ -129,10 +131,26 @@ Page({
     wx.navigateTo({ url: `/pages/goods/detail?id=${id}` });
   },
 
+  retry() {
+    this.load();
+  },
+
+  goShopping() {
+    wx.switchTab({ url: '/pages/goods/list' });
+  },
+
   goSettle() {
     const sel = this.data.list.filter((g) => g.isSelected);
     if (!sel.length) {
       wx.showToast({ title: '请先选择商品', icon: 'none' });
+      return;
+    }
+    const outOfStock = sel.find((g) => g.stock <= 0 || g.quantity > g.stock);
+    if (outOfStock) {
+      wx.showToast({
+        title: outOfStock.stock > 0 ? `${outOfStock.title}库存不足` : `${outOfStock.title}已售罄`,
+        icon: 'none',
+      });
       return;
     }
     // 把选中的购物车条目带到结算页(JSON 序列化,控制长度)

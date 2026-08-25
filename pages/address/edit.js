@@ -14,6 +14,7 @@ Page({
       isDefault: false,
     },
     saving: false,
+    error: '',
   },
 
   onLoad(options) {
@@ -38,7 +39,7 @@ Page({
             });
           }
         })
-        .catch(() => {});
+        .catch((err) => this.setData({ error: err.message || '地址加载失败' }));
     }
   },
 

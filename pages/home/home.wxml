@@ -3,7 +3,8 @@
   <swiper class="swiper" indicator-dots autoplay circular interval="4000" duration="500"
     wx:if="{{swiper.length}}">
     <swiper-item wx:for="{{swiper}}" wx:key="index">
-      <image class="swiper-img" src="{{item.image}}" mode="aspectFill" />
+      <image class="swiper-img" src="{{item.image}}" mode="aspectFill"
+        bindtap="onBannerTap" data-link="{{item.link}}" />
     </swiper-item>
   </swiper>
 

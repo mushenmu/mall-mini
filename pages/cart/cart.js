@@ -8,6 +8,7 @@ Page({
     allSelected: false,
     loading: true,
     error: '',
+    syncing: false,
   },
 
   onShow() {
@@ -66,14 +67,19 @@ Page({
   },
 
   toggleAll() {
+    if (this.data.syncing || !this.data.list.length) return;
     const next = !this.data.allSelected;
+    const previous = this.data.list.map((g) => Object.assign({}, g));
     const list = this.data.list.map((g) => Object.assign({}, g, { isSelected: next }));
-    this.setData({ list, allSelected: next });
+    this.setData({ list, allSelected: next, syncing: true });
     this.calc();
-    // 逐条同步后端
-    list.forEach((g) => {
-      updateCartItem(getUid(), g.id, { isSelected: g.isSelected }).catch(() => {});
-    });
+    Promise.all(list.map((g) => updateCartItem(getUid(), g.id, { isSelected: next })))
+      .then(() => this.setData({ syncing: false }))
+      .catch((err) => {
+        this.setData({ list: previous, syncing: false });
+        this.calc();
+        wx.showToast({ title: err.message || '全选同步失败，已恢复', icon: 'none' });
+      });
   },
 
   updateItem(id, patch, index) {

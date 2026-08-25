@@ -5,6 +5,7 @@ Page({
   data: {
     list: [],
     loading: true,
+    error: '',
     selectMode: false,   // 是否从结算页进入(点击返回选中地址)
   },
 
@@ -20,13 +21,14 @@ Page({
   },
 
   load() {
+    this.setData({ loading: true, error: '' });
     fetchAddressList(getUid())
       .then((res) => {
         this.setData({ list: res.list || [], loading: false });
       })
       .catch((err) => {
         console.error('地址加载失败', err);
-        this.setData({ loading: false });
+        this.setData({ loading: false, error: err.message || '地址加载失败' });
       });
   },
 
@@ -65,5 +67,9 @@ Page({
 
   addAddress() {
     wx.navigateTo({ url: '/pages/address/edit' });
+  },
+
+  retry() {
+    this.load();
   },
 });

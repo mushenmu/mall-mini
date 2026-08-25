@@ -12,7 +12,8 @@
     </view>
   </view>
 
-  <view class="empty" wx:if="{{!loading && !list.length}}">还没有收货地址</view>
+  <view class="empty" wx:if="{{!loading && !error && !list.length}}">还没有收货地址</view>
+  <view class="error-state" wx:if="{{error}}"><text>{{error}}</text><text class="retry" bindtap="retry">重新加载</text></view>
 
   <view class="safe-bottom" style="height: 140rpx;"></view>
 

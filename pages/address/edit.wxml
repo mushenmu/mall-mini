@@ -1,5 +1,6 @@
 <view class="page">
   <view class="form-card">
+    <view class="error-state" wx:if="{{error}}"><text>{{error}}</text></view>
     <view class="form-row">
       <text class="label">收货人</text>
       <input class="input" placeholder="请输入收货人姓名" value="{{form.name}}"

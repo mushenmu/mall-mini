@@ -8,7 +8,8 @@ Page({
     goods: null,
     quantity: 1,
     loading: true,
-    cartCount: 0,
+    error: '',
+
   },
 
   onLoad(options) {
@@ -17,13 +18,10 @@ Page({
   },
 
   onShow() {
-    if (this.data.id) {
-      // 返回时刷新购物车角标(简单展示)
-      this.loadCartCount();
-    }
   },
 
   load() {
+    this.setData({ loading: true, error: '' });
     fetchGoodsDetail(this.data.id)
       .then((g) => {
         this.setData({
@@ -34,8 +32,7 @@ Page({
       })
       .catch((err) => {
         console.error('商品详情加载失败', err);
-        this.setData({ loading: false });
-        wx.showToast({ title: '商品不存在或已下架', icon: 'none' });
+        this.setData({ loading: false, error: err.message || '商品详情加载失败' });
       });
   },
 
@@ -53,9 +50,6 @@ Page({
     };
   },
 
-  loadCartCount() {
-    // 轻量展示:购物车数量在购物车页为准,这里不再单独拉取
-  },
 
   // 数量选择
   onMinus() {
@@ -103,5 +97,9 @@ Page({
 
   goCart() {
     wx.switchTab({ url: '/pages/cart/cart' });
+  },
+
+  retry() {
+    this.load();
   },
 });

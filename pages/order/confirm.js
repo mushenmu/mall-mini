@@ -33,7 +33,7 @@ Page({
   },
 
   onShow() {
-    if (this.data.addressList.length) this.loadAddresses();
+    this.loadAddresses();
   },
 
   loadGoods(items) {
@@ -152,6 +152,7 @@ Page({
     this.setData({ submitting: true });
     const payload = {
       uid: getUid(),
+      clientRequestId: `mini-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
       addressId: this.data.address.id,
       remark: this.data.remark,
       items: this.data.items.map((g) => ({ productId: g.productId, quantity: g.quantity })),

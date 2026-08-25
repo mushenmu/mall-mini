@@ -15,11 +15,13 @@ Page({
     activeTab: '',
     orders: [],
     loading: true,
+    error: '',
   },
 
   onLoad(options) {
     if (options.status !== undefined) {
-      this.setData({ activeTab: options.status || '' });
+      const status = options.status === '' ? '' : Number(options.status);
+      this.setData({ activeTab: Number.isNaN(status) ? '' : status });
     }
   },
 
@@ -32,6 +34,7 @@ Page({
   },
 
   load(done) {
+    this.setData({ loading: true, error: '' });
     fetchOrderList({ uid: getUid(), status: this.data.activeTab })
       .then((res) => {
         const orders = (res.list || []).map((o) => ({
@@ -49,7 +52,7 @@ Page({
       })
       .catch((err) => {
         console.error('订单列表加载失败', err);
-        this.setData({ loading: false });
+        this.setData({ loading: false, error: err.message || '订单加载失败' });
         if (done) done();
       });
   },
@@ -63,5 +66,9 @@ Page({
   goDetail(e) {
     const { no } = e.currentTarget.dataset;
     wx.navigateTo({ url: `/pages/order/detail?orderNo=${no}` });
+  },
+
+  retry() {
+    this.load();
   },
 });

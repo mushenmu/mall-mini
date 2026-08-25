@@ -29,9 +29,9 @@
 
   <!-- 底部结算栏 -->
   <view class="settle-bar safe-bottom" wx:if="{{list.length}}">
-    <view class="check-all" bindtap="toggleAll">
+    <view class="check-all {{syncing ? 'disabled' : ''}}" bindtap="toggleAll">
       <view class="check {{allSelected ? 'checked' : ''}}"><text wx:if="{{allSelected}}">✓</text></view>
-      <text>全选</text>
+      <text>{{syncing ? '同步中...' : '全选'}}</text>
     </view>
     <view class="total">
       合计:<text class="price"><text class="symbol">¥</text>{{total}}</text>

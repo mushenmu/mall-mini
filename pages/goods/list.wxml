@@ -14,12 +14,23 @@
     <text class="hot-word" wx:for="{{popularWords}}" wx:key="index"
       bindtap="onTapPopular" data-word="{{item}}">{{item}}</text>
   </view>
+  <view class="sub-error" wx:if="{{categoryError || popularError}}">
+    <text>{{categoryError || popularError}}</text><text class="retry" bindtap="retryAuxiliary">重试</text>
+  </view>
 
   <!-- 分类横向滚动 -->
   <scroll-view class="cate-scroll" scroll-x enhanced show-scrollbar="{{false}}">
     <view class="cate-item {{activeCat === '' ? 'active' : ''}}" bindtap="onTapCategory" data-id="">全部</view>
     <view class="cate-item {{activeCat === item.id ? 'active' : ''}}"
       wx:for="{{categories}}" wx:key="id" bindtap="onTapCategory" data-id="{{item.id}}">{{item.name}}</view>
+  </scroll-view>
+
+  <!-- 二级分类 -->
+  <scroll-view class="cate-scroll sub-cate" scroll-x enhanced show-scrollbar="{{false}}"
+    wx:if="{{activeSubList.length}}">
+    <view class="cate-item sub {{activeSubCat === '' ? 'active' : ''}}" bindtap="onTapSubCategory" data-id="">全部</view>
+    <view class="cate-item sub {{activeSubCat === item.id ? 'active' : ''}}"
+      wx:for="{{activeSubList}}" wx:key="id" bindtap="onTapSubCategory" data-id="{{item.id}}">{{item.name}}</view>
   </scroll-view>
 
   <!-- 排序条 -->

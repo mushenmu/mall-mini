@@ -1,4 +1,4 @@
-const { fetchOrderDetail, payOrder, cancelOrder, confirmOrder } = require('../../services/order');
+const { fetchOrderDetail, fetchOrderLogistics, payOrder, cancelOrder, confirmOrder } = require('../../services/order');
 const { getUid } = require('../../utils/auth');
 
 Page({
@@ -7,6 +7,9 @@ Page({
     order: null,
     loading: true,
     operating: false,
+    logisticsLoading: false,
+    logisticsError: '',
+    logistics: null,
   },
 
   onLoad(options) {
@@ -19,16 +22,25 @@ Page({
       .then((o) => {
         o.totalAmountYuan = (parseInt(o.totalAmount, 10) || 0) / 100;
         o.paymentAmountYuan = (parseInt(o.paymentAmount, 10) || 0) / 100;
+        o.hasExpress = !!o.expressNo;
         o.items = (o.items || []).map((i) => Object.assign({}, i, {
           priceYuan: (parseInt(i.price, 10) || 0) / 100,
         }));
         this.setData({ order: o, loading: false });
+        if (o.hasExpress) this.loadLogistics();
       })
       .catch((err) => {
         console.error('订单详情加载失败', err);
         this.setData({ loading: false });
         wx.showToast({ title: err.message || '订单不存在', icon: 'none' });
       });
+  },
+
+  loadLogistics() {
+    this.setData({ logisticsLoading: true, logisticsError: '' });
+    fetchOrderLogistics(getUid(), this.data.orderNo)
+      .then((logistics) => this.setData({ logistics, logisticsLoading: false }))
+      .catch((err) => this.setData({ logisticsLoading: false, logisticsError: err.message || '物流加载失败' }));
   },
 
   pay() {

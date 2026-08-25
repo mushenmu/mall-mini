@@ -26,6 +26,17 @@ function buildUrl(path, query) {
   return url;
 }
 
+function normalizeMediaUrls(value) {
+  if (typeof value === 'string' && value.indexOf('/media/') === 0) return `${apiBaseUrl}${value}`;
+  if (Array.isArray(value)) return value.map(normalizeMediaUrls);
+  if (value && typeof value === 'object') {
+    const result = {};
+    Object.keys(value).forEach((key) => { result[key] = normalizeMediaUrls(value[key]); });
+    return result;
+  }
+  return value;
+}
+
 /**
  * @param {string} path  形如 '/api/goods/list'
  * @param {object} options { method, data, query }
@@ -54,11 +65,14 @@ function request(path, options) {
     };
     let task;
     try {
+      const token = require('./auth').getToken();
       task = wx.request({
         url: finalUrl,
         method,
         data,
-        header: { 'Content-Type': 'application/json' },
+        header: Object.assign({ 'Content-Type': 'application/json' }, token ? {
+          Authorization: `Bearer ${token}`,
+        } : {}),
         success: (res) => {
           if (res.statusCode >= 200 && res.statusCode < 300) {
             const body = res.data || {};
@@ -66,7 +80,7 @@ function request(path, options) {
               finish(reject, new Error(body.msg || `请求失败: ${path}`));
               return;
             }
-            const payload = body.data !== undefined ? body.data : body;
+            const payload = normalizeMediaUrls(body.data !== undefined ? body.data : body);
             if (method === 'GET' && options.cache) {
               responseCache[cacheKey] = {
                 data: payload,

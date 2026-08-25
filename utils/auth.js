@@ -10,6 +10,7 @@
  */
 const UID_KEY = 'mushenmu_uid';
 const INFO_KEY = 'mushenmu_user_info';
+const TOKEN_KEY = 'mushenmu_auth_token';
 
 // 演示兜底 uid:后端 get_or_create 会自动建用户。
 // 仅在微信登录失败时使用,保证 App 不阻塞、页面照常加载。
@@ -29,11 +30,16 @@ function getUserInfo() {
   return wx.getStorageSync(INFO_KEY) || null;
 }
 
+function getToken() {
+  return typeof wx.getStorageSync === 'function' ? (wx.getStorageSync(TOKEN_KEY) || '') : '';
+}
+
 /** 登录成功后保存登录态(uid + 用户资料)。 */
 function saveLogin(data) {
   const uid = data && data.uid;
   if (!uid) return;
   wx.setStorageSync(UID_KEY, uid);
+  if (data.token) wx.setStorageSync(TOKEN_KEY, data.token);
   if (data.userInfo) wx.setStorageSync(INFO_KEY, data.userInfo);
   const app = getApp();
   if (app && app.globalData) app.globalData.uid = uid;
@@ -45,6 +51,7 @@ function saveLogin(data) {
 function clearLogin() {
   wx.removeStorageSync(UID_KEY);
   wx.removeStorageSync(INFO_KEY);
+  wx.removeStorageSync(TOKEN_KEY);
   const app = getApp();
   if (app && app.globalData) app.globalData.uid = FALLBACK_UID;
   loginPromise = null;
@@ -87,5 +94,5 @@ function loginWithProfile(profile) {
 }
 
 module.exports = {
-  getUid, getUserInfo, saveLogin, clearLogin, ensureLogin, loginWithProfile, FALLBACK_UID,
+  getUid, getUserInfo, getToken, saveLogin, clearLogin, ensureLogin, loginWithProfile, FALLBACK_UID,
 };

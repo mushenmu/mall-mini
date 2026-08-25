@@ -11,6 +11,21 @@
     <view class="receiver-addr">{{order.receiver.address}}</view>
   </view>
 
+  <view class="panel express-panel" wx:if="{{order.hasExpress}}">
+    <view class="express-title">物流信息</view>
+    <view class="express-row"><text>承运公司</text><text>{{order.expressCompany || '快递'}}</text></view>
+    <view class="express-row"><text>快递单号</text><text>{{order.expressNo}}</text></view>
+    <view class="express-row" wx:if="{{order.shippedAt}}"><text>发货时间</text><text>{{order.shippedAt}}</text></view>
+    <view class="express-loading" wx:if="{{logisticsLoading}}">物流查询中...</view>
+    <view class="express-error" wx:elif="{{logisticsError}}" bindtap="loadLogistics">{{logisticsError}}，点击重试</view>
+    <view class="express-traces" wx:elif="{{logistics}}">
+      <view class="express-trace" wx:for="{{logistics.traces}}" wx:key="index">
+        <view class="trace-time">{{item.time}}</view><view class="trace-text">{{item.context}}</view>
+      </view>
+      <view class="express-empty" wx:if="{{!logistics.traces.length}}">暂无物流轨迹</view>
+    </view>
+  </view>
+
   <!-- 商品清单 -->
   <view class="panel">
     <view class="goods-item" wx:for="{{order.items}}" wx:key="index">

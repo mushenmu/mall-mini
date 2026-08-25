@@ -22,6 +22,10 @@ function fetchOrderDetail(uid, orderNo) {
   return get('/api/order/detail', { uid, orderNo });
 }
 
+function fetchOrderLogistics(uid, orderNo) {
+  return get('/api/order/logistics', { uid, orderNo });
+}
+
 // 模拟支付
 function payOrder(uid, orderNo) {
   return afterOrderMutation(post('/api/order/pay', { uid, orderNo }));
@@ -38,6 +42,6 @@ function confirmOrder(uid, orderNo) {
 }
 
 module.exports = {
-  commitOrder, fetchOrderList, fetchOrderDetail,
+  commitOrder, fetchOrderList, fetchOrderDetail, fetchOrderLogistics,
   payOrder, cancelOrder, confirmOrder,
 };

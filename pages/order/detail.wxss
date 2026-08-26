@@ -59,6 +59,7 @@
 }
 
 .express-loading, .express-empty { color: #999; font-size: 26rpx; padding-top: 12rpx; }
+.express-refresh { display: inline-block; margin-top: 12rpx; font-size: 24rpx; color: #1677ff; }
 .express-error { color: #fa4126; font-size: 26rpx; padding-top: 12rpx; }
 .express-trace { border-left: 4rpx solid #fa4126; padding: 4rpx 0 16rpx 20rpx; margin-top: 12rpx; }
 .trace-time { color: #999; font-size: 22rpx; }

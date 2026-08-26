@@ -16,6 +16,7 @@
     <view class="express-row"><text>承运公司</text><text>{{order.expressCompany || '快递'}}</text></view>
     <view class="express-row"><text>快递单号</text><text>{{order.expressNo}}</text></view>
     <view class="express-row" wx:if="{{order.shippedAt}}"><text>发货时间</text><text>{{order.shippedAt}}</text></view>
+    <view class="express-refresh" wx:if="{{!logisticsLoading && !logisticsError}}" bindtap="loadLogistics">刷新物流</view>
     <view class="express-loading" wx:if="{{logisticsLoading}}">物流查询中...</view>
     <view class="express-error" wx:elif="{{logisticsError}}" bindtap="loadLogistics">{{logisticsError}}，点击重试</view>
     <view class="express-traces" wx:elif="{{logistics}}">

@@ -141,14 +141,36 @@ Page({
       wx.showToast({ title: '没有可结算的商品', icon: 'none' });
       return;
     }
-    const outOfStock = this.data.items.find((item) => item.stock <= 0 || item.quantity > item.stock);
-    if (outOfStock) {
-      wx.showToast({
-        title: outOfStock.stock > 0 ? `${outOfStock.title}库存不足` : `${outOfStock.title}已售罄`,
-        icon: 'none',
-      });
-      return;
-    }
+    this.setData({ submitting: true });
+    // 提交前二次校验最新价格与库存(页面停留期间可能变化);校验失败则不提交
+    Promise.all(this.data.items.map((it) =>
+      fetchGoodsDetail(it.productId).then((g) => ({ it, g }))
+    ))
+      .then((checks) => {
+        for (const { it, g } of checks) {
+          if (!g || !g.stock) {
+            this.setData({ submitting: false });
+            wx.showToast({ title: `${it.title}已售罄`, icon: 'none' });
+            return;
+          }
+          if (it.quantity > g.stock) {
+            this.setData({ submitting: false });
+            wx.showToast({ title: `${it.title}库存不足，仅剩${g.stock}件`, icon: 'none' });
+            return;
+          }
+          const latestPrice = (parseInt(g.price, 10) || 0) / 100;
+          if (latestPrice !== it.price) {
+            this.setData({ submitting: false });
+            wx.showToast({ title: `${it.title}价格已更新，请重新确认`, icon: 'none' });
+            return;
+          }
+        }
+        this.doSubmit();
+      })
+      .catch(() => this.doSubmit());
+  },
+
+  doSubmit() {
     this.setData({ submitting: true });
     const payload = {
       uid: getUid(),
